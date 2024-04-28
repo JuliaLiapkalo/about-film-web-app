@@ -62,6 +62,7 @@ public class FilmController {
     @PostMapping(value = "/_report", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public ResponseEntity<?> getFilmsReport(HttpServletResponse response, @RequestBody FilmNameAndGenreDto filmNameAndGenreDto) {
         filmService.generateFilmReport(response, filmNameAndGenreDto);
+        response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
         return ResponseEntity.ok().build();
     }
 

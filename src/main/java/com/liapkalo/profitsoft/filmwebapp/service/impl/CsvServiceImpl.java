@@ -2,7 +2,6 @@ package com.liapkalo.profitsoft.filmwebapp.service.impl;
 
 import com.liapkalo.profitsoft.filmwebapp.entity.dto.FilmNameAndGenreDto;
 import com.liapkalo.profitsoft.filmwebapp.service.CsvService;
-import com.liapkalo.profitsoft.filmwebapp.service.FilmService;
 import com.liapkalo.profitsoft.filmwebapp.utils.PaginationUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;

@@ -44,8 +44,16 @@ public class FilmUtils {
                 .name("FilmName")
                 .genre("FilmGenre")
                 .releaseYear(1999)
-                .director(new Director())
-                .mainActors(Collections.singletonList(new Actor()))
+                .director(buildDirector())
+                .mainActors(Collections.singletonList(buildActor()))
                 .build();
+    }
+
+    public static Director buildDirector() {
+        return new Director(1L, "Dir", 50);
+    }
+
+    public static Actor buildActor() {
+        return new Actor(1L, "Act");
     }
 }
