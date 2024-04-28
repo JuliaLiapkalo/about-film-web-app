@@ -1,0 +1,302 @@
+[
+  {
+    "name": "The Shawshank Redemption",
+    "genre": "Drama",
+    "releaseYear": 1994,
+    "mainActors": ["Tim Robbins", "Morgan Freeman"],
+    "director": {
+      "name": "Frank Darabont",
+      "age": 62
+    }
+  },
+  {
+    "name": "",
+    "genre": "Crime",
+    "releaseYear": 1972,
+    "mainActors": ["Marlon Brando", "Al Pacino"],
+    "director": {
+      "name": "Francis Ford Coppola",
+      "age": 82
+    }
+  },
+  {
+    "name": "The Godfather",
+    "genre": "Crime",
+    "releaseYear": 1972,
+    "mainActors": ["Marlon Brando", "Al Pacino"],
+    "director": {
+      "name": "",
+      "age": 51
+    }
+  },
+  {
+    "name": "Inception",
+    "genre": "Sci-Fi",
+    "releaseYear": 0,
+    "mainActors": ["Leonardo DiCaprio", "Joseph Gordon-Levitt"],
+    "director": {
+      "name": "Christopher Nolan",
+      "age": 51
+    }
+  },
+  {
+    "name": "Forrest Gump",
+    "genre": "Drama",
+    "releaseYear": 1994,
+    "mainActors": ["Tom Hanks", "Robin Wright"],
+    "director": {
+      "name": "Robert Zemeckis",
+      "age": 69
+    }
+  },
+  {
+    "name": "The Matrix",
+    "genre": "Action",
+    "releaseYear": 1999,
+    "mainActors": ["Keanu Reeves", "Laurence Fishburne"],
+    "director": {
+      "name": "The Wachowskis",
+      "age": null
+    }
+  },
+  {
+    "name": "Pulp Fiction",
+    "genre": "Crime",
+    "releaseYear": 1994,
+    "mainActors": ["John Travolta", "Uma Thurman"],
+    "director": {
+      "name": "Quentin Tarantino",
+      "age": 58
+    }
+  },
+  {
+    "name": "The Dark Knight",
+    "genre": "Action",
+    "releaseYear": 2008,
+    "mainActors": ["Christian Bale", "Heath Ledger"],
+    "director": {
+      "name": "Christopher Nolan",
+      "age": 51
+    }
+  },
+  {
+    "name": "Schindler's List",
+    "genre": "Biography",
+    "releaseYear": 1993,
+    "mainActors": ["Liam Neeson", "Ben Kingsley"],
+    "director": {
+      "name": "Steven Spielberg",
+      "age": 75
+    }
+  },
+  {
+    "name": "The Lord of the Rings: The Fellowship of the Ring",
+    "genre": "Fantasy",
+    "releaseYear": 2001,
+    "mainActors": ["Elijah Wood", "Ian McKellen"],
+    "director": {
+      "name": "Peter Jackson",
+      "age": 60
+    }
+  },
+  {
+    "name": "Fight Club",
+    "genre": "Drama",
+    "releaseYear": 1999,
+    "mainActors": ["Brad Pitt", "Edward Norton"],
+    "director": {
+      "name": "David Fincher",
+      "age": 59
+    }
+  },
+  {
+    "name": "The Lord of the Rings: The Two Towers",
+    "genre": "Fantasy",
+    "releaseYear": 2002,
+    "mainActors": ["Elijah Wood", "Ian McKellen"],
+    "director": {
+      "name": "Peter Jackson",
+      "age": 60
+    }
+  },
+  {
+    "name": "The Lord of the Rings: The Return of the King",
+    "genre": "Fantasy",
+    "releaseYear": 2003,
+    "mainActors": ["Elijah Wood", "Ian McKellen"],
+    "director": {
+      "name": "Peter Jackson",
+      "age": 60
+    }
+  },
+  {
+    "name": "The Silence of the Lambs",
+    "genre": "Thriller",
+    "releaseYear": 1991,
+    "mainActors": ["Jodie Foster", "Anthony Hopkins"],
+    "director": {
+      "name": "Jonathan Demme",
+      "age": 73
+    }
+  },
+  {
+    "name": "Goodfellas",
+    "genre": "Crime",
+    "releaseYear": 1990,
+    "mainActors": ["Robert De Niro", "Ray Liotta"],
+    "director": {
+      "name": "Martin Scorsese",
+      "age": 79
+    }
+  },
+  {
+    "name": "The Departed",
+    "genre": "Crime",
+    "releaseYear": 2006,
+    "mainActors": ["Leonardo DiCaprio", "Matt Damon"],
+    "director": {
+      "name": "Martin Scorsese",
+      "age": 79
+    }
+  },
+  {
+    "name": "Gladiator",
+    "genre": "Action",
+    "releaseYear": 2000,
+    "mainActors": ["Russell Crowe", "Joaquin Phoenix"],
+    "director": {
+      "name": "Ridley Scott",
+      "age": 83
+    }
+  },
+  {
+    "name": "The Green Mile",
+    "genre": "Drama",
+    "releaseYear": 1999,
+    "mainActors": ["Tom Hanks", "Michael Clarke Duncan"],
+    "director": {
+      "name": "Frank Darabont",
+      "age": 62
+    }
+  },
+  {
+    "name": "Se7en",
+    "genre": "Thriller",
+    "releaseYear": 1995,
+    "mainActors": ["Brad Pitt", "Morgan Freeman"],
+    "director": {
+      "name": "David Fincher",
+      "age": 59
+    }
+  },
+  {
+    "name": "Inglourious Basterds",
+    "genre": "War",
+    "releaseYear": 2009,
+    "mainActors": ["Brad Pitt", "Christoph Waltz"],
+    "director": {
+      "name": "Quentin Tarantino",
+      "age": 58
+    }
+  },
+  {
+    "name": "The Social Network",
+    "genre": "Biography",
+    "releaseYear": 2010,
+    "mainActors": ["Jesse Eisenberg", "Andrew Garfield"],
+    "director": {
+      "name": "David Fincher",
+      "age": 59
+    }
+  },
+  {
+    "name": "The Curious Case of Benjamin Button",
+    "genre": "Fantasy",
+    "releaseYear": 2008,
+    "mainActors": ["Brad Pitt", "Cate Blanchett"],
+    "director": {
+      "name": "David Fincher",
+      "age": 59
+    }
+  },
+  {
+    "name": "The Intouchables",
+    "genre": "Comedy-Drama",
+    "releaseYear": 2011,
+    "mainActors": ["François Cluzet", "Omar Sy"],
+    "director": {
+      "name": "Olivier Nakache",
+      "age": 49
+    }
+  },
+  {
+    "name": "Whiplash",
+    "genre": "Drama",
+    "releaseYear": 2014,
+    "mainActors": ["Miles Teller", "J.K. Simmons"],
+    "director": {
+      "name": "Damien Chazelle",
+      "age": 37
+    }
+  },
+  {
+    "name": "Gone Girl",
+    "genre": "Thriller",
+    "releaseYear": 2014,
+    "mainActors": ["Ben Affleck", "Rosamund Pike"],
+    "director": {
+      "name": "David Fincher",
+      "age": 59
+    }
+  },
+  {
+    "name": "The Imitation Game",
+    "genre": "Biography",
+    "releaseYear": 2014,
+    "mainActors": ["Benedict Cumberbatch", "Keira Knightley"],
+    "director": {
+      "name": "Morten Tyldum",
+      "age": 53
+    }
+  },
+  {
+    "name": "The Grand Budapest Hotel",
+    "genre": "Comedy-Drama",
+    "releaseYear": 2014,
+    "mainActors": ["Ralph Fiennes", "Tony Revolori"],
+    "director": {
+      "name": "Wes Anderson",
+      "age": 53
+    }
+  },
+  {
+    "name": "The Revenant",
+    "genre": "Adventure-Drama",
+    "releaseYear": 2015,
+    "mainActors": ["Leonardo DiCaprio", "Tom Hardy"],
+    "director": {
+      "name": "Alejandro González Iñárritu",
+      "age": 58
+    }
+  },
+  {
+    "name": "La La Land",
+    "genre": "Musical-Drama",
+    "releaseYear": 2016,
+    "mainActors": ["Ryan Gosling", "Emma Stone"],
+    "director": {
+      "name": "Damien Chazelle",
+      "age": 37
+    }
+  },
+  {
+    "name": "Django Unchained",
+    "genre": "Western",
+    "releaseYear": 2012,
+    "mainActors": ["Jamie Foxx", "Christoph Waltz"],
+    "director": {
+      "name": "Quentin Tarantino",
+      "age": 58
+    }
+  }
+]
