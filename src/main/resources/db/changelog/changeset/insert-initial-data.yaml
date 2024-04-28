@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-example-data
+      author: JuliaLiapkalo
+      changes:
+        - sqlFile:
+            path: db/sql/insert_data.sql

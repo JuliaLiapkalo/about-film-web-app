@@ -1,0 +1,117 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-app-tables
+      author: JuliaLiapkalo
+      changes:
+
+        - createTable:
+            tableName: directors
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: age
+                  type: int
+                  constraints:
+                     nullable: true
+
+        - createTable:
+            tableName: films
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: genre
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: release_year
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: director_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+
+        - createTable:
+            tableName: actors
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+
+        - createTable:
+            tableName: film_actor
+            columns:
+              - column:
+                  name: film_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: actor_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+
+        - addForeignKeyConstraint:
+            baseColumnNames: director_id
+            baseTableName: films
+            constraintName: fk_film_director
+            onDelete: CASCADE
+            onUpdate: CASCADE
+            referencedColumnNames: id
+            referencedTableName: directors
+            validate: true
+
+        - addForeignKeyConstraint:
+            baseColumnNames: film_id
+            baseTableName: film_actor
+            constraintName: fk_film_actor
+            onDelete: CASCADE
+            onUpdate: CASCADE
+            referencedColumnNames: id
+            referencedTableName: films
+            validate: true
+
+        - addForeignKeyConstraint:
+            baseColumnNames: actor_id
+            baseTableName: film_actor
+            constraintName: fk_actor_film
+            onDelete: CASCADE
+            onUpdate: CASCADE
+            referencedColumnNames: id
+            referencedTableName: actors
+            validate: true
