@@ -1,5 +1,6 @@
 package com.liapkalo.profitsoft.filmwebapp.service;
 
+import com.liapkalo.profitsoft.filmwebapp.builder.FilmBuilder;
 import com.liapkalo.profitsoft.filmwebapp.entity.Actor;
 import com.liapkalo.profitsoft.filmwebapp.entity.Director;
 import com.liapkalo.profitsoft.filmwebapp.entity.Film;
@@ -36,6 +37,9 @@ public class FilmServiceTest {
     @InjectMocks
     private FilmServiceImpl filmService;
 
+    @Mock
+    private FilmBuilder filmBuilder;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
@@ -54,8 +58,6 @@ public class FilmServiceTest {
         Film createdFilm = filmService.createFilm(filmDto);
 
         assertEquals(expectedFilm, createdFilm);
-        verify(directorServiceImpl, times(1)).createDirector(any());
-        verify(actorServiceImpl, times(1)).createActor(any());
         verify(filmRepository, times(1)).save(any());
     }
 

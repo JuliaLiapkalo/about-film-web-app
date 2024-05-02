@@ -2,24 +2,28 @@ package com.liapkalo.profitsoft.filmwebapp.service;
 
 import com.liapkalo.profitsoft.filmwebapp.entity.Film;
 import com.liapkalo.profitsoft.filmwebapp.entity.dto.FilmDto;
-import com.liapkalo.profitsoft.filmwebapp.entity.dto.FilmNameAndGenreDto;
-import jakarta.servlet.http.HttpServletResponse;
+import com.liapkalo.profitsoft.filmwebapp.entity.dto.FilmFilterDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.io.OutputStream;
+import java.util.List;
+import java.util.Map;
 
 public interface FilmService {
-    Film createFilm(FilmDto filmDto);
-    Film getFilm(Long id);
-    Film updateFilm(Long id, FilmDto filmDto);
-    String deleteFilm(Long id);
-    Page<FilmNameAndGenreDto> getFilmsFromList(FilmNameAndGenreDto filmNameAndGenreDto, Pageable pageable);
-    void generateFilmReport(HttpServletResponse response, FilmNameAndGenreDto filmNameAndGenreDto);
-    String getFilmsFromJson(MultipartFile file);
-    void createFilmCsv(FilmNameAndGenreDto filmNameAndGenreDto, OutputStream outputStream) throws IOException;
 
+    Film createFilm(FilmDto filmDto);
+
+    Film getFilm(Long id);
+
+    Film updateFilm(Long id, FilmDto filmDto);
+
+    String deleteFilm(Long id);
+
+    List<Film> getFilteredFilms(FilmFilterDto filmFilterDto);
+
+    Page<Film> getFilmsFromList(FilmFilterDto filmFilterDto, Pageable pageable);
+
+    Map<String, Integer> getFilmsFromJson(MultipartFile file);
 
 }

@@ -4,6 +4,7 @@ import com.liapkalo.profitsoft.filmwebapp.entity.Actor;
 import com.liapkalo.profitsoft.filmwebapp.entity.Director;
 import com.liapkalo.profitsoft.filmwebapp.entity.Film;
 import com.liapkalo.profitsoft.filmwebapp.entity.dto.FilmDto;
+import com.liapkalo.profitsoft.filmwebapp.entity.dto.FilmFilterDto;
 import lombok.experimental.UtilityClass;
 
 import java.util.Collections;
@@ -43,6 +44,17 @@ public class FilmUtils {
                 .id(1L)
                 .name("FilmName")
                 .genre("FilmGenre")
+                .releaseYear(1999)
+                .director(buildDirector())
+                .mainActors(Collections.singletonList(buildActor()))
+                .build();
+    }
+
+    public static Film buildFilm(FilmFilterDto filmFilterDto) {
+        return Film.builder()
+                .id(1L)
+                .name(filmFilterDto.getName())
+                .genre(filmFilterDto.getGenre())
                 .releaseYear(1999)
                 .director(buildDirector())
                 .mainActors(Collections.singletonList(buildActor()))

@@ -35,7 +35,9 @@ public class DirectorServiceImpl implements DirectorService {
     @Override
     public Director createDirector(DirectorDto directorDto) {
         log.info("Creating director: {}", directorDto);
+
         Optional<Director> director = directorRepository.findByNameAndAge(directorDto.getName(), directorDto.getAge());
+
         return director.orElseGet(() -> directorRepository.save(buildDirector(directorDto)));
     }
 
@@ -48,6 +50,7 @@ public class DirectorServiceImpl implements DirectorService {
     @Override
     public List<Director> getDirectors() {
         log.info("Getting all directors");
+
         return directorRepository.findAll();
     }
 
@@ -67,8 +70,10 @@ public class DirectorServiceImpl implements DirectorService {
     @Override
     public Director updateDirector(Long id, DirectorDto directorDto) {
         log.info("Updating director: {}", directorDto);
+
         Director director = directorRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Director with id " + id + " not found"));
+
         return directorRepository.save(updateDirectorFields(director, directorDto));
     }
 
@@ -82,15 +87,10 @@ public class DirectorServiceImpl implements DirectorService {
     @Override
     public String deleteDirector(Long id) {
         log.info("Deleting director with id: {}", id);
-        directorRepository.deleteById(id);
-        return "Director with id [" + id + "] deleted successfully!";
-    }
 
-    Director buildDirector(DirectorDto request) {
-        return Director.builder()
-                .name(request.getName())
-                .age(request.getAge())
-                .build();
+        directorRepository.deleteById(id);
+
+        return "Director with id [" + id + "] deleted successfully!";
     }
 
     /** (TEMPORARY METHOD - UNTIL APP WITHOUT UI, TO HAVE ABILITY UPDATE ONE FILED) */
@@ -104,4 +104,10 @@ public class DirectorServiceImpl implements DirectorService {
         return director;
     }
 
+    private Director buildDirector(DirectorDto directorDto) {
+        return Director.builder()
+                .name(directorDto.getName())
+                .age(directorDto.getAge())
+                .build();
+    }
 }

@@ -37,10 +37,11 @@ public class ActorServiceImpl implements ActorService {
         return actor.orElseGet(() -> actorRepository.save(buildActor(actorDto)));
     }
 
-    Actor buildActor(ActorDto request) {
+    private Actor buildActor(ActorDto actorDto) {
         return Actor.builder()
-                .name(request.getName())
+                .name(actorDto.getName())
                 .build();
     }
+
 
 }

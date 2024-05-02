@@ -1,7 +1,8 @@
 package com.liapkalo.profitsoft.filmwebapp.controller;
 
 import com.liapkalo.profitsoft.filmwebapp.entity.dto.FilmDto;
-import com.liapkalo.profitsoft.filmwebapp.entity.dto.FilmNameAndGenreDto;
+import com.liapkalo.profitsoft.filmwebapp.entity.dto.FilmFilterDto;
+import com.liapkalo.profitsoft.filmwebapp.service.CsvService;
 import com.liapkalo.profitsoft.filmwebapp.service.FilmService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -26,6 +27,7 @@ import static com.liapkalo.profitsoft.filmwebapp.utils.ListUtils.createResponseL
 public class FilmController {
 
     FilmService filmService;
+    CsvService csvService;
 
     @PostMapping
     public ResponseEntity<?> addFilm(@Valid @RequestBody FilmDto filmDto) {
@@ -48,21 +50,17 @@ public class FilmController {
     }
 
     @PostMapping("/_list")
-    public ResponseEntity<?> getFilmsByPage(@RequestBody(required = false) FilmNameAndGenreDto filmNameAndGenreDto,
+    public ResponseEntity<?> getFilmsByPage(@RequestBody(required = false) FilmFilterDto filmFilterDto,
                                             @RequestParam(defaultValue = "0") int page,
                                             @RequestParam(defaultValue = "10") int size) {
 
-        return ResponseEntity.ok().body(
-                createResponseList(
-                        filmService.getFilmsFromList(
-                                filmNameAndGenreDto,
-                                PageRequest.of(page, size, Sort.by("id").descending()))));
+        return ResponseEntity.ok().body(createResponseList(filmService.getFilmsFromList(filmFilterDto,
+                                PageRequest.of(page, size, Sort.by("id")))));
     }
 
     @PostMapping(value = "/_report", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-    public ResponseEntity<?> getFilmsReport(HttpServletResponse response, @RequestBody FilmNameAndGenreDto filmNameAndGenreDto) {
-        filmService.generateFilmReport(response, filmNameAndGenreDto);
-        response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
+    public ResponseEntity<?> getFilmsReport(HttpServletResponse response, @RequestBody FilmFilterDto filmFilterDto) {
+        csvService.generateFilmCsvReport(response, filmFilterDto);
         return ResponseEntity.ok().build();
     }
 

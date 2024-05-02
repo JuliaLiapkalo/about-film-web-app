@@ -3,22 +3,25 @@ package com.liapkalo.profitsoft.filmwebapp.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.liapkalo.profitsoft.filmwebapp.entity.Film;
 import com.liapkalo.profitsoft.filmwebapp.entity.dto.FilmDto;
-import com.liapkalo.profitsoft.filmwebapp.entity.dto.FilmNameAndGenreDto;
+import com.liapkalo.profitsoft.filmwebapp.entity.dto.FilmFilterDto;
 import com.liapkalo.profitsoft.filmwebapp.service.FilmService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
+import utils.FilmUtils;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -27,8 +30,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static utils.FilmUtils.buildFilm;
-import static utils.FilmUtils.buildFilmDto;
+import static utils.FilmUtils.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -125,19 +127,19 @@ public class FilmControllerIntegrationTest {
 
     @Test
     public void getFilmsByPageTest() throws Exception {
-        FilmNameAndGenreDto filmNameAndGenreDto = new FilmNameAndGenreDto();
-        filmNameAndGenreDto.setName("Film Name");
-        filmNameAndGenreDto.setGenre("Action");
+        FilmFilterDto filmFilterDto = new FilmFilterDto();
+        filmFilterDto.setName("Film Name");
+        filmFilterDto.setGenre("Action");
 
-        List<FilmNameAndGenreDto> films = Arrays.asList(
-                new FilmNameAndGenreDto("Film1", "Action", 1L),
-                new FilmNameAndGenreDto("Film2", "Action", 2L));
+        List<FilmFilterDto> films = Arrays.asList(
+                new FilmFilterDto("Film1", "Action", buildDirector()),
+                new FilmFilterDto("Film2", "Action", buildDirector()));
 
-        when(filmService.getFilmsFromList(eq(filmNameAndGenreDto), any(Pageable.class))).thenReturn(new PageImpl<>(films));
-
+        when(filmService.getFilmsFromList(eq(filmFilterDto), any(Pageable.class)))
+                .thenReturn(new PageImpl<>(films.stream().map(FilmUtils::buildFilm).toList()));
         mockMvc.perform(post("/api/v1/films/_list")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(filmNameAndGenreDto)))
+                        .content(objectMapper.writeValueAsString(filmFilterDto)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.films", hasSize(2)))
                 .andExpect(jsonPath("$.films[0].name").value("Film1"))
@@ -148,14 +150,13 @@ public class FilmControllerIntegrationTest {
 
     @Test
     public void getFilmsReportTest() throws Exception {
-        FilmNameAndGenreDto filmNameAndGenreDto = new FilmNameAndGenreDto();
-        filmNameAndGenreDto.setName("Film Name");
-        filmNameAndGenreDto.setGenre("Action");
+        FilmFilterDto filmFilterDto = new FilmFilterDto();
+        filmFilterDto.setName("Film Name");
+        filmFilterDto.setGenre("Action");
 
         mockMvc.perform(post("/api/v1/films/_report")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(filmNameAndGenreDto)))
-                // Then
+                        .content(objectMapper.writeValueAsString(filmFilterDto)))
                 .andExpect(status().isOk())
                 .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_OCTET_STREAM_VALUE));
     }

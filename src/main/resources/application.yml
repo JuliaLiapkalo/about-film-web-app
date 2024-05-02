@@ -17,5 +17,5 @@ spring:
     show-sql: true
 server:
   port: 8086
-page-number-for-pagination : 0
-page-size-for-pagination : 10
+
+
