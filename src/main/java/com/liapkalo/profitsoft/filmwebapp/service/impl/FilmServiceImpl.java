@@ -1,9 +1,5 @@
 package com.liapkalo.profitsoft.filmwebapp.service.impl;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonToken;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.liapkalo.profitsoft.filmwebapp.builder.FilmBuilder;
 import com.liapkalo.profitsoft.filmwebapp.entity.Actor;
 import com.liapkalo.profitsoft.filmwebapp.entity.Director;
 import com.liapkalo.profitsoft.filmwebapp.entity.Film;
@@ -11,6 +7,7 @@ import com.liapkalo.profitsoft.filmwebapp.entity.dto.ActorDto;
 import com.liapkalo.profitsoft.filmwebapp.entity.dto.DirectorDto;
 import com.liapkalo.profitsoft.filmwebapp.entity.dto.FilmDto;
 import com.liapkalo.profitsoft.filmwebapp.entity.dto.FilmFilterDto;
+import com.liapkalo.profitsoft.filmwebapp.entity.mapper.FilmMapper;
 import com.liapkalo.profitsoft.filmwebapp.repository.FilmRepository;
 import com.liapkalo.profitsoft.filmwebapp.service.ActorService;
 import com.liapkalo.profitsoft.filmwebapp.service.DirectorService;
@@ -24,15 +21,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.time.Year;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.liapkalo.profitsoft.filmwebapp.utils.JsonParseUtils.validateJson;
 
 @Slf4j
 @Service
@@ -43,8 +36,7 @@ public class FilmServiceImpl implements FilmService {
     FilmRepository filmRepository;
     DirectorService directorService;
     ActorService actorService;
-    ObjectMapper objectMapper;
-    FilmBuilder filmBuilder;
+    FilmMapper filmMapper;
 
     /**
      * This method creates a new film using the provided FilmDto and saves it to the database.
@@ -56,7 +48,7 @@ public class FilmServiceImpl implements FilmService {
     @Override
     public Film createFilm(FilmDto filmDto) {
         log.info("Creating film: {}", filmDto);
-        return filmRepository.save(filmBuilder.buildFilm(filmDto));
+        return filmRepository.save(addFilm(filmDto));
     }
 
     /**
@@ -126,10 +118,10 @@ public class FilmServiceImpl implements FilmService {
      * @throws NoSuchElementException if no films matching the criteria are found in the database.
      */
     @Override
-    public Page<Film> getFilmsFromList(FilmFilterDto filmFilterDto, Pageable pageable) {
+    public Map<String, Object> getFilteredFilmsByPage(FilmFilterDto filmFilterDto, Pageable pageable) {
         log.info("Getting films from page: {}", pageable.getPageNumber());
 
-        return filmRepository.findAll(FilmSpecifications.filterFilm(filmFilterDto), pageable);
+        return createResponseList(filmRepository.findAll(FilmSpecifications.filterFilm(filmFilterDto), pageable));
     }
 
     /**
@@ -142,88 +134,56 @@ public class FilmServiceImpl implements FilmService {
         return filmRepository.findAll(FilmSpecifications.filterFilm(filmFilterDto));
     }
 
-    /**
-     * Parses a JSON file containing film data and saves the films to the database.
-     * This method reads the content of the provided JSON file using a JsonParser and saves each film to the database.
-     * The JSON file is expected to contain an array of film objects.
-     *
-     * @param file The JSON file containing film data.
-     * IOException If an I/O error occurs while parsing the JSON file.
-     */
-    @Override
-    public Map<String, Integer> getFilmsFromJson(MultipartFile file)  {
-        log.info("Parsing file: {}", file.getOriginalFilename());
-        Map<String, Integer> importStatistic = new HashMap<>();
-        try (InputStream inputStream = file.getInputStream();
-             JsonParser parser = objectMapper.getFactory().createParser(inputStream)) {
-
-            validateJson(parser);
-            importStatistic = parseFilmDtos(parser);
-
-            log.info("File parsed successfully: {}", file.getOriginalFilename());
-        } catch (IOException e) {
-            log.error("Error parsing file: {}", file.getOriginalFilename(), e);
-        }
-        return importStatistic;
+    private Map<String, Object> createResponseList(Page<Film> films) {
+        Map<String, Object> response = new HashMap<>();
+        response.put("films", films.getContent().stream()
+                .map(filmMapper::toFilmFilterDto)
+                .collect(Collectors.toList()));
+        response.put("totalPages", films.getTotalPages());
+        return response;
     }
 
-
-
-    private Map<String, Integer> parseFilmDtos(JsonParser parser) throws IOException {
-        Map<String, Integer> importStatistic = new HashMap<>();
-        importStatistic.put("Successes", 0);
-        importStatistic.put("Fails", 0);
-
-        while (parser.nextToken() != JsonToken.END_ARRAY) {
-            FilmDto filmDto = parser.readValueAs(FilmDto.class);
-
-            if (checkToValid(filmDto)) {
-                filmRepository.save(filmBuilder.buildFilm(filmDto));
-                importStatistic.compute("Successes", (k, successes) -> successes + 1);
-
-            } else importStatistic.compute("Fails", (k, fails) -> fails + 1);
-        }
-        return importStatistic;
+    private Film addFilm(FilmDto filmDto) {
+        Film film = filmMapper.toFilm(filmDto);
+        Director director = directorService.getOrCreateDirector(filmDto.getDirector());
+        film.setDirector(director);
+        List<Actor> actors = actorService.getOrCreateActors(filmDto.getMainActors());
+        film.setMainActors(actors);
+        return film;
     }
 
-    private boolean checkToValid(FilmDto filmDto) {
-        return !filmDto.getName().isEmpty() &&
-               !filmDto.getGenre().isEmpty() &&
-               filmDto.getReleaseYear() < Year.now().getValue() &&
-               !filmDto.getMainActors().isEmpty() &&
-               !filmDto.getDirector().getName().isEmpty() &&
-               filmDto.getDirector().getAge() > 0;
-    }
-
-    /** (TEMPORARY METHOD - UNTIL APP WITHOUT UI, TO HAVE ABILITY UPDATE ONE FILED) */
+    /** (METHOD TO HAVE ABILITY UPDATE ONE FILED) */
     private void updateFilmFields(Film film, FilmDto filmDto) {
-        if (Objects.nonNull(filmDto.getName())) {
+        if (Objects.nonNull(filmDto.getName()) && !filmDto.getName().isBlank()) {
             film.setName(filmDto.getName());
         }
-        if (Objects.nonNull(filmDto.getGenre())) {
-            film.setGenre(filmDto.getGenre());
+        if (Objects.nonNull(filmDto.getGenre()) && !filmDto.getGenre().isBlank()) {
+            film.setGenre(film.getGenre());
         }
         if (Objects.nonNull(filmDto.getReleaseYear()) &&
                 Year.now().isAfter(Year.of(filmDto.getReleaseYear()))) {
             film.setReleaseYear(filmDto.getReleaseYear());
         }
+
         updateMainActors(film, filmDto.getMainActors());
         updateDirector(film, filmDto.getDirector());
     }
 
-    private void updateMainActors(Film film, List<Actor> actors) {
+    private void updateMainActors(Film film, List<ActorDto> actors) {
         if (Objects.nonNull(actors)) {
             film.setMainActors(actors.stream()
-                    .map(actorDto -> actorService.createActor(new ActorDto(actorDto.getName())))
+                    .map(actorDto -> actorService.getOrCreateActor(new ActorDto(actorDto.getName())))
                     .collect(Collectors.toList()));
         }
     }
 
-    private void updateDirector(Film film, Director director) {
+    private void updateDirector(Film film, DirectorDto director) {
         if (Objects.nonNull(director)) {
-            film.setDirector(directorService.createDirector(new DirectorDto(director.getName(), director.getAge())));
+            if (!director.getName().isEmpty() && !director.getName().isBlank() ||
+                director.getAge() > 0) {
+                film.setDirector(directorService.getOrCreateDirector(new DirectorDto(director.getName(), director.getAge())));
+            }
         }
     }
-
 
 }

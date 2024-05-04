@@ -2,6 +2,7 @@ package com.liapkalo.profitsoft.filmwebapp.service;
 
 import com.liapkalo.profitsoft.filmwebapp.entity.Actor;
 import com.liapkalo.profitsoft.filmwebapp.entity.dto.ActorDto;
+import com.liapkalo.profitsoft.filmwebapp.entity.mapper.ActorMapper;
 import com.liapkalo.profitsoft.filmwebapp.repository.ActorRepository;
 import com.liapkalo.profitsoft.filmwebapp.service.impl.ActorServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,20 +26,24 @@ public class ActorServiceTest {
     @InjectMocks
     private ActorServiceImpl actorService;
 
+    @Mock
+    private ActorMapper actorMapper;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
     }
 
     @Test
-    void testCreateActor_NewActor() {
+    void testGetOrCreateActor_NewActor() {
         ActorDto actorDto = new ActorDto("John Doe");
         Actor newActor = new Actor("John Doe");
 
         when(actorRepository.findByName(actorDto.getName())).thenReturn(Optional.empty());
         when(actorRepository.save(any(Actor.class))).thenReturn(newActor);
+        when(actorMapper.toActor(any(ActorDto.class))).thenReturn(newActor);
 
-        Actor createdActor = actorService.createActor(actorDto);
+        Actor createdActor = actorService.getOrCreateActor(actorDto);
 
         assertNotNull(createdActor);
         assertEquals(newActor.getName(), createdActor.getName());
@@ -47,13 +52,13 @@ public class ActorServiceTest {
     }
 
     @Test
-    void testCreateActor_ExistingActor() {
+    void testGetOrCreateActor_ExistingActor() {
         ActorDto actorDto = new ActorDto("John Doe");
         Actor existingActor = new Actor("John Doe");
 
         when(actorRepository.findByName(actorDto.getName())).thenReturn(Optional.of(existingActor));
 
-        Actor createdActor = actorService.createActor(actorDto);
+        Actor createdActor = actorService.getOrCreateActor(actorDto);
 
         assertNotNull(createdActor);
         assertEquals(existingActor.getName(), createdActor.getName());

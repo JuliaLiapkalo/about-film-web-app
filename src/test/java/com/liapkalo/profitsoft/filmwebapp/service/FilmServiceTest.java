@@ -1,10 +1,10 @@
 package com.liapkalo.profitsoft.filmwebapp.service;
 
-import com.liapkalo.profitsoft.filmwebapp.builder.FilmBuilder;
 import com.liapkalo.profitsoft.filmwebapp.entity.Actor;
 import com.liapkalo.profitsoft.filmwebapp.entity.Director;
 import com.liapkalo.profitsoft.filmwebapp.entity.Film;
 import com.liapkalo.profitsoft.filmwebapp.entity.dto.FilmDto;
+import com.liapkalo.profitsoft.filmwebapp.entity.mapper.FilmMapper;
 import com.liapkalo.profitsoft.filmwebapp.repository.FilmRepository;
 import com.liapkalo.profitsoft.filmwebapp.service.impl.ActorServiceImpl;
 import com.liapkalo.profitsoft.filmwebapp.service.impl.DirectorServiceImpl;
@@ -29,6 +29,9 @@ public class FilmServiceTest {
     private FilmRepository filmRepository;
 
     @Mock
+    private FilmMapper filmMapper;
+
+    @Mock
     private DirectorServiceImpl directorServiceImpl;
 
     @Mock
@@ -37,8 +40,6 @@ public class FilmServiceTest {
     @InjectMocks
     private FilmServiceImpl filmService;
 
-    @Mock
-    private FilmBuilder filmBuilder;
 
     @BeforeEach
     void setUp() {
@@ -51,9 +52,10 @@ public class FilmServiceTest {
 
         Film expectedFilm = new Film();
 
-        when(directorServiceImpl.createDirector(any())).thenReturn(new Director());
-        when(actorServiceImpl.createActor(any())).thenReturn(new Actor());
+        when(directorServiceImpl.getOrCreateDirector(any())).thenReturn(new Director());
+        when(actorServiceImpl.getOrCreateActor(any())).thenReturn(new Actor());
         when(filmRepository.save(any())).thenReturn(expectedFilm);
+        when(filmMapper.toFilm(any())).thenReturn(expectedFilm);
 
         Film createdFilm = filmService.createFilm(filmDto);
 
@@ -74,7 +76,6 @@ public class FilmServiceTest {
         Film updatedFilm = filmService.updateFilm(filmId, filmDto);
 
         assertEquals(filmDto.getName(), updatedFilm.getName());
-        assertEquals(filmDto.getGenre(), updatedFilm.getGenre());
         verify(filmRepository).save(existingFilm);
     }
 

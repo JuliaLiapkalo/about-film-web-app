@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface DirectorService {
 
-    Director createDirector(DirectorDto directorDto);
+    Director getOrCreateDirector(DirectorDto directorDto);
 
     List<Director> getDirectors();
 

@@ -1,23 +1,23 @@
 package com.liapkalo.profitsoft.filmwebapp.entity.dto;
 
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.*;
+import lombok.*;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
 public class DirectorDto {
 
     @NotBlank
+    @NotNull
     @Size(min = 1, max = 255)
     String name;
 
+    @NotNull
     @Min(1)
-    int age;
+    @Max(120)
+    Integer age;
+
 }

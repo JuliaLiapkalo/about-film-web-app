@@ -2,11 +2,11 @@ package com.liapkalo.profitsoft.filmwebapp.controller;
 
 import com.liapkalo.profitsoft.filmwebapp.entity.dto.DirectorDto;
 import com.liapkalo.profitsoft.filmwebapp.service.DirectorService;
-import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -23,8 +23,8 @@ public class DirectorController {
     }
 
     @PostMapping
-    public ResponseEntity<?> addDirector(@Valid @RequestBody DirectorDto directorDto) {
-        return ResponseEntity.ok(directorService.createDirector(directorDto));
+    public ResponseEntity<?> addDirector(@Validated @RequestBody DirectorDto directorDto) {
+        return ResponseEntity.ok(directorService.getOrCreateDirector(directorDto));
     }
 
     @PutMapping("/{id}")

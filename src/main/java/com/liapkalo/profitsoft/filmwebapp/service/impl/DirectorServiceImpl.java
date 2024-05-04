@@ -2,6 +2,7 @@ package com.liapkalo.profitsoft.filmwebapp.service.impl;
 
 import com.liapkalo.profitsoft.filmwebapp.entity.Director;
 import com.liapkalo.profitsoft.filmwebapp.entity.dto.DirectorDto;
+import com.liapkalo.profitsoft.filmwebapp.entity.mapper.DirectorMapper;
 import com.liapkalo.profitsoft.filmwebapp.repository.DirectorRepository;
 import com.liapkalo.profitsoft.filmwebapp.service.DirectorService;
 import jakarta.transaction.Transactional;
@@ -22,6 +23,7 @@ import java.util.Optional;
 public class DirectorServiceImpl implements DirectorService {
 
     DirectorRepository directorRepository;
+    DirectorMapper directorMapper;
 
     /**
      * Creates a director based on the provided DirectorDto object.
@@ -33,12 +35,12 @@ public class DirectorServiceImpl implements DirectorService {
      * @return The created director if it already exists in the database, otherwise a new director saved to the database.
      */
     @Override
-    public Director createDirector(DirectorDto directorDto) {
+    public Director getOrCreateDirector(DirectorDto directorDto) {
         log.info("Creating director: {}", directorDto);
 
         Optional<Director> director = directorRepository.findByNameAndAge(directorDto.getName(), directorDto.getAge());
+        return director.orElseGet(() -> directorRepository.save(directorMapper.toDirector(directorDto)));
 
-        return director.orElseGet(() -> directorRepository.save(buildDirector(directorDto)));
     }
 
     /**
@@ -93,7 +95,7 @@ public class DirectorServiceImpl implements DirectorService {
         return "Director with id [" + id + "] deleted successfully!";
     }
 
-    /** (TEMPORARY METHOD - UNTIL APP WITHOUT UI, TO HAVE ABILITY UPDATE ONE FILED) */
+    /** (METHOD TO HAVE ABILITY UPDATE ONE FILED) */
     private Director updateDirectorFields(Director director, DirectorDto directorDto) {
         if (Objects.nonNull(directorDto.getName())) {
             director.setName(directorDto.getName());
@@ -104,10 +106,4 @@ public class DirectorServiceImpl implements DirectorService {
         return director;
     }
 
-    private Director buildDirector(DirectorDto directorDto) {
-        return Director.builder()
-                .name(directorDto.getName())
-                .age(directorDto.getAge())
-                .build();
-    }
 }

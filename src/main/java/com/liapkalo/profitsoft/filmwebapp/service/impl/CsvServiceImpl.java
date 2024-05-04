@@ -2,6 +2,7 @@ package com.liapkalo.profitsoft.filmwebapp.service.impl;
 
 import com.liapkalo.profitsoft.filmwebapp.entity.Film;
 import com.liapkalo.profitsoft.filmwebapp.entity.dto.FilmFilterDto;
+import com.liapkalo.profitsoft.filmwebapp.entity.mapper.FilmMapper;
 import com.liapkalo.profitsoft.filmwebapp.service.CsvService;
 import com.liapkalo.profitsoft.filmwebapp.service.FilmService;
 import jakarta.servlet.http.HttpServletResponse;
@@ -21,6 +22,7 @@ import java.util.List;
 public class CsvServiceImpl implements CsvService {
 
     FilmService filmService;
+    FilmMapper filmMapper;
 
     /**
      * Generates a CSV report of films based on the provided criteria and writes it to the HttpServletResponse.
@@ -66,7 +68,7 @@ public class CsvServiceImpl implements CsvService {
 
     private void writeFilmsToCsv(OutputStream outputStream, List<Film> films) {
         for (Film film : films) {
-            String csvLine = String.format("%s,%s\n", film.getName(), film.getGenre());
+            String csvLine = filmMapper.toFilmFilterDto(film).toString() + "\n";
             try {
                 outputStream.write(csvLine.getBytes());
             } catch (IOException e) {
@@ -76,7 +78,7 @@ public class CsvServiceImpl implements CsvService {
     }
 
     private void writeCsvHeader(OutputStream outputStream) {
-        String header = "Name,Genre\n";
+        String header = "Name,Genre,Director name\n";
         try {
             outputStream.write(header.getBytes());
         } catch (IOException e) {

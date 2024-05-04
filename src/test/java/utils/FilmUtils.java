@@ -3,6 +3,8 @@ package utils;
 import com.liapkalo.profitsoft.filmwebapp.entity.Actor;
 import com.liapkalo.profitsoft.filmwebapp.entity.Director;
 import com.liapkalo.profitsoft.filmwebapp.entity.Film;
+import com.liapkalo.profitsoft.filmwebapp.entity.dto.ActorDto;
+import com.liapkalo.profitsoft.filmwebapp.entity.dto.DirectorDto;
 import com.liapkalo.profitsoft.filmwebapp.entity.dto.FilmDto;
 import com.liapkalo.profitsoft.filmwebapp.entity.dto.FilmFilterDto;
 import lombok.experimental.UtilityClass;
@@ -17,8 +19,8 @@ public class FilmUtils {
                 .name("Film Name")
                 .genre("Action")
                 .releaseYear(2022)
-                .director(new Director())
-                .mainActors(Collections.singletonList(new Actor()))
+                .director(new DirectorDto())
+                .mainActors(Collections.singletonList(new ActorDto()))
                .build();
     }
 

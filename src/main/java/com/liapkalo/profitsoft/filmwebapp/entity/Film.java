@@ -17,7 +17,9 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Table(name = "films", indexes = {@Index(name = "idx_name", columnList = "name"),
-                                  @Index(name = "idx_actors", columnList = "mainActors")})
+                                  @Index(name = "idx_actors", columnList = "mainActors"),
+                                  @Index(name = "idx_name_genre_director", columnList = "name, genre, director")}
+)
 public class Film {
 
      @Id

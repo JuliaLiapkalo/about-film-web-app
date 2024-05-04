@@ -2,6 +2,7 @@ package com.liapkalo.profitsoft.filmwebapp.service.impl;
 
 import com.liapkalo.profitsoft.filmwebapp.entity.Actor;
 import com.liapkalo.profitsoft.filmwebapp.entity.dto.ActorDto;
+import com.liapkalo.profitsoft.filmwebapp.entity.mapper.ActorMapper;
 import com.liapkalo.profitsoft.filmwebapp.repository.ActorRepository;
 import com.liapkalo.profitsoft.filmwebapp.service.ActorService;
 import lombok.AccessLevel;
@@ -10,6 +11,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -20,6 +22,7 @@ import java.util.Optional;
 public class ActorServiceImpl implements ActorService {
 
     ActorRepository actorRepository;
+    ActorMapper actorMapper;
 
     /**
      * Creates an actor based on the provided ActorDto object.
@@ -31,16 +34,21 @@ public class ActorServiceImpl implements ActorService {
      * @return The created actor if it already exists in the database, otherwise a new actor saved to the database.
      */
     @Override
-    public Actor createActor(ActorDto actorDto) {
+    public Actor getOrCreateActor(ActorDto actorDto) {
         log.info("Creating actor: {}", actorDto);
         Optional<Actor> actor = actorRepository.findByName(actorDto.getName());
-        return actor.orElseGet(() -> actorRepository.save(buildActor(actorDto)));
+        return actor.orElseGet(() -> actorRepository.save(actorMapper.toActor(actorDto)));
     }
 
-    private Actor buildActor(ActorDto actorDto) {
-        return Actor.builder()
-                .name(actorDto.getName())
-                .build();
+    /**
+     * Retrieves or creates actors based on a list of actor DTOs.
+     *
+     * @param actorDto The list of actor DTOs.
+     * @return A list of actors.
+     */
+    @Override
+    public List<Actor> getOrCreateActors(List<ActorDto> actorDto) {
+        return actorDto.stream().map(this::getOrCreateActor).toList();
     }
 
 
