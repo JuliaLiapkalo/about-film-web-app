@@ -4,6 +4,7 @@ import com.liapkalo.profitsoft.filmwebapp.entity.Actor;
 import com.liapkalo.profitsoft.filmwebapp.entity.Director;
 import com.liapkalo.profitsoft.filmwebapp.entity.Film;
 import com.liapkalo.profitsoft.filmwebapp.entity.dto.FilmDto;
+import com.liapkalo.profitsoft.filmwebapp.entity.dto.FilmUpdateDto;
 import com.liapkalo.profitsoft.filmwebapp.entity.mapper.FilmMapper;
 import com.liapkalo.profitsoft.filmwebapp.repository.FilmRepository;
 import com.liapkalo.profitsoft.filmwebapp.service.impl.ActorServiceImpl;
@@ -66,7 +67,7 @@ public class FilmServiceTest {
     @Test
     void testUpdateFilm() {
         Long filmId = 1L;
-        FilmDto filmDto = buildDtoForUpdate();
+        FilmUpdateDto filmDto = buildDtoForUpdate();
 
         Film existingFilm = buildFilm();
 
@@ -82,7 +83,7 @@ public class FilmServiceTest {
     @Test
     void testUpdateFilmNotFound() {
         Long filmId = 1L;
-        FilmDto filmDto = new FilmDto();
+        FilmUpdateDto filmDto = new FilmUpdateDto();
 
         when(filmRepository.findById(filmId)).thenReturn(Optional.empty());
 

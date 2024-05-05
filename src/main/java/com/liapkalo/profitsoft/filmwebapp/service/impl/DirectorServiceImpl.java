@@ -2,6 +2,7 @@ package com.liapkalo.profitsoft.filmwebapp.service.impl;
 
 import com.liapkalo.profitsoft.filmwebapp.entity.Director;
 import com.liapkalo.profitsoft.filmwebapp.entity.dto.DirectorDto;
+import com.liapkalo.profitsoft.filmwebapp.entity.dto.DirectorUpdateDto;
 import com.liapkalo.profitsoft.filmwebapp.entity.mapper.DirectorMapper;
 import com.liapkalo.profitsoft.filmwebapp.repository.DirectorRepository;
 import com.liapkalo.profitsoft.filmwebapp.service.DirectorService;
@@ -12,9 +13,11 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.*;
+
+import static com.liapkalo.profitsoft.filmwebapp.utils.GetMethods.getSetterMethods;
 
 @Slf4j
 @Service
@@ -70,7 +73,7 @@ public class DirectorServiceImpl implements DirectorService {
      */
     @Transactional
     @Override
-    public Director updateDirector(Long id, DirectorDto directorDto) {
+    public Director updateDirector(Long id, DirectorUpdateDto directorDto) {
         log.info("Updating director: {}", directorDto);
 
         Director director = directorRepository.findById(id)
@@ -95,15 +98,26 @@ public class DirectorServiceImpl implements DirectorService {
         return "Director with id [" + id + "] deleted successfully!";
     }
 
-    /** (METHOD TO HAVE ABILITY UPDATE ONE FILED) */
-    private Director updateDirectorFields(Director director, DirectorDto directorDto) {
-        if (Objects.nonNull(directorDto.getName())) {
-            director.setName(directorDto.getName());
-        }
-        if (directorDto.getAge() > 0) {
-            director.setAge(directorDto.getAge());
+    private Director updateDirectorFields(Director director, DirectorUpdateDto directorDto) {
+        Map<String, Method> setters = getSetterMethods(Director.class);
+        Field[] fields = directorDto.getClass().getDeclaredFields();
+        for (Field field : fields) {
+            field.setAccessible(true);
+            try {
+                Object value = field.get(directorDto);
+                if (value != null) {
+                    String fieldName = field.getName();
+                    Method setter = setters.get(fieldName.toLowerCase());
+                    if (setter != null) {
+                        setter.invoke(director, value);
+                    }
+                }
+            } catch (Exception e) {
+               log.error(e.getMessage());
+            }
         }
         return director;
     }
+
 
 }

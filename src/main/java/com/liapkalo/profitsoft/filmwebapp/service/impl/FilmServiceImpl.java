@@ -3,10 +3,7 @@ package com.liapkalo.profitsoft.filmwebapp.service.impl;
 import com.liapkalo.profitsoft.filmwebapp.entity.Actor;
 import com.liapkalo.profitsoft.filmwebapp.entity.Director;
 import com.liapkalo.profitsoft.filmwebapp.entity.Film;
-import com.liapkalo.profitsoft.filmwebapp.entity.dto.ActorDto;
-import com.liapkalo.profitsoft.filmwebapp.entity.dto.DirectorDto;
-import com.liapkalo.profitsoft.filmwebapp.entity.dto.FilmDto;
-import com.liapkalo.profitsoft.filmwebapp.entity.dto.FilmFilterDto;
+import com.liapkalo.profitsoft.filmwebapp.entity.dto.*;
 import com.liapkalo.profitsoft.filmwebapp.entity.mapper.FilmMapper;
 import com.liapkalo.profitsoft.filmwebapp.repository.FilmRepository;
 import com.liapkalo.profitsoft.filmwebapp.service.ActorService;
@@ -22,9 +19,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.time.Year;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.liapkalo.profitsoft.filmwebapp.utils.GetMethods.getSetterMethods;
 
 
 @Slf4j
@@ -78,7 +78,7 @@ public class FilmServiceImpl implements FilmService {
      */
     @Transactional
     @Override
-    public Film updateFilm(Long id, FilmDto filmDto) {
+    public Film updateFilm(Long id, FilmUpdateDto filmDto) {
         log.info("Updating film: {}", filmDto);
 
         Film existingFilm = filmRepository.findById(id)
@@ -153,16 +153,23 @@ public class FilmServiceImpl implements FilmService {
     }
 
     /** (METHOD TO HAVE ABILITY UPDATE ONE FILED) */
-    private void updateFilmFields(Film film, FilmDto filmDto) {
-        if (Objects.nonNull(filmDto.getName()) && !filmDto.getName().isBlank()) {
-            film.setName(filmDto.getName());
-        }
-        if (Objects.nonNull(filmDto.getGenre()) && !filmDto.getGenre().isBlank()) {
-            film.setGenre(film.getGenre());
-        }
-        if (Objects.nonNull(filmDto.getReleaseYear()) &&
-                Year.now().isAfter(Year.of(filmDto.getReleaseYear()))) {
-            film.setReleaseYear(filmDto.getReleaseYear());
+    private void updateFilmFields(Film film, FilmUpdateDto filmDto) {
+        Map<String, Method> setters = getSetterMethods(Film.class);
+        Field[] fields = filmDto.getClass().getDeclaredFields();
+        for (Field field : fields) {
+            field.setAccessible(true);
+            try {
+                Object value = field.get(filmDto);
+                if (value != null) {
+                    String fieldName = field.getName();
+                    Method setter = setters.get(fieldName.toLowerCase());
+                    if (setter != null) {
+                        setter.invoke(film, value);
+                    }
+                }
+            } catch (Exception e) {
+                log.error(e.getMessage());
+            }
         }
 
         updateMainActors(film, filmDto.getMainActors());
@@ -177,7 +184,7 @@ public class FilmServiceImpl implements FilmService {
         }
     }
 
-    private void updateDirector(Film film, DirectorDto director) {
+    private void updateDirector(Film film, DirectorUpdateDto director) {
         if (Objects.nonNull(director)) {
             if (!director.getName().isEmpty() && !director.getName().isBlank() ||
                 director.getAge() > 0) {

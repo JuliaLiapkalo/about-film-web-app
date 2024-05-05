@@ -3,6 +3,7 @@ package utils;
 
 import com.liapkalo.profitsoft.filmwebapp.entity.Director;
 import com.liapkalo.profitsoft.filmwebapp.entity.dto.DirectorDto;
+import com.liapkalo.profitsoft.filmwebapp.entity.dto.DirectorUpdateDto;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -23,8 +24,21 @@ public class DirectorUtils {
               .build();
    }
 
+   public static DirectorUpdateDto buildDirectorUpdateDto() {
+      return DirectorUpdateDto.builder()
+              .name("Updated director")
+              .age(45)
+              .build();
+   }
+
    public static DirectorDto buildDirectorDtoInvalidName() {
       return DirectorDto.builder()
+              .age(45)
+              .build();
+   }
+
+   public static DirectorUpdateDto buildDirectorUpdateDtoInvalidName() {
+      return DirectorUpdateDto.builder()
               .age(45)
               .build();
    }

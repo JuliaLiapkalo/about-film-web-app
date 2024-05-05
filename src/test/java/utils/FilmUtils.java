@@ -3,10 +3,7 @@ package utils;
 import com.liapkalo.profitsoft.filmwebapp.entity.Actor;
 import com.liapkalo.profitsoft.filmwebapp.entity.Director;
 import com.liapkalo.profitsoft.filmwebapp.entity.Film;
-import com.liapkalo.profitsoft.filmwebapp.entity.dto.ActorDto;
-import com.liapkalo.profitsoft.filmwebapp.entity.dto.DirectorDto;
-import com.liapkalo.profitsoft.filmwebapp.entity.dto.FilmDto;
-import com.liapkalo.profitsoft.filmwebapp.entity.dto.FilmFilterDto;
+import com.liapkalo.profitsoft.filmwebapp.entity.dto.*;
 import lombok.experimental.UtilityClass;
 
 import java.util.Collections;
@@ -34,8 +31,8 @@ public class FilmUtils {
                 .build();
     }
 
-    public static FilmDto buildDtoForUpdate() {
-        return FilmDto.builder()
+    public static FilmUpdateDto buildDtoForUpdate() {
+        return FilmUpdateDto.builder()
                 .name("Updated Film Name")
                 .genre("Updated Genre")
                 .build();

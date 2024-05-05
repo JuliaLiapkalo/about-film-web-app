@@ -1,6 +1,7 @@
 package com.liapkalo.profitsoft.filmwebapp.controller;
 
 import com.liapkalo.profitsoft.filmwebapp.entity.dto.DirectorDto;
+import com.liapkalo.profitsoft.filmwebapp.entity.dto.DirectorUpdateDto;
 import com.liapkalo.profitsoft.filmwebapp.service.DirectorService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,7 @@ public class DirectorController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateDirector(@PathVariable("id") Long id, @RequestBody DirectorDto directorDto) {
+    public ResponseEntity<?> updateDirector(@PathVariable("id") Long id, @Validated @RequestBody DirectorUpdateDto directorDto) {
         return ResponseEntity.ok(directorService.updateDirector(id, directorDto));
     }
 

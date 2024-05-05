@@ -2,6 +2,7 @@ package com.liapkalo.profitsoft.filmwebapp.controller;
 
 import com.liapkalo.profitsoft.filmwebapp.entity.dto.FilmDto;
 import com.liapkalo.profitsoft.filmwebapp.entity.dto.FilmFilterDto;
+import com.liapkalo.profitsoft.filmwebapp.entity.dto.FilmUpdateDto;
 import com.liapkalo.profitsoft.filmwebapp.service.CsvService;
 import com.liapkalo.profitsoft.filmwebapp.service.FilmService;
 import com.liapkalo.profitsoft.filmwebapp.service.ImportFilmService;
@@ -40,7 +41,7 @@ public class FilmController {
     }
 
     @PutMapping ("/{id}")
-    public ResponseEntity<?> updateFilm(@PathVariable("id") Long id, @RequestBody FilmDto film) {
+    public ResponseEntity<?> updateFilm(@PathVariable("id") Long id, @Validated @RequestBody FilmUpdateDto film) {
         return ResponseEntity.ok().body(filmService.updateFilm(id, film));
     }
 

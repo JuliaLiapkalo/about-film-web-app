@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.liapkalo.profitsoft.filmwebapp.entity.Film;
 import com.liapkalo.profitsoft.filmwebapp.entity.dto.FilmDto;
 import com.liapkalo.profitsoft.filmwebapp.entity.dto.FilmFilterDto;
+import com.liapkalo.profitsoft.filmwebapp.entity.dto.FilmUpdateDto;
 import com.liapkalo.profitsoft.filmwebapp.service.FilmService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,7 +96,7 @@ public class FilmControllerIntegrationTest {
                 .releaseYear(updatedFilmDto.getReleaseYear())
                 .build();
 
-        when(filmService.updateFilm(eq(filmId), any(FilmDto.class))).thenReturn(updatedFilm);
+        when(filmService.updateFilm(eq(filmId), any(FilmUpdateDto.class))).thenReturn(updatedFilm);
 
         mockMvc.perform(put("/api/v1/films/{id}", filmId)
                         .contentType(MediaType.APPLICATION_JSON)

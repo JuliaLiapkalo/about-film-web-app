@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.liapkalo.profitsoft.filmwebapp.FilmWebApplication;
 import com.liapkalo.profitsoft.filmwebapp.entity.Director;
 import com.liapkalo.profitsoft.filmwebapp.entity.dto.DirectorDto;
+import com.liapkalo.profitsoft.filmwebapp.entity.dto.DirectorUpdateDto;
 import com.liapkalo.profitsoft.filmwebapp.service.DirectorService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -107,7 +108,7 @@ public class DirectorControllerIntegrationTest {
         DirectorDto directorDto = buildDirectorDto();
         Director updatedDirector = buildDirector();
 
-        when(directorService.updateDirector(eq(directorId), any(DirectorDto.class))).thenReturn(updatedDirector);
+        when(directorService.updateDirector(eq(directorId), any(DirectorUpdateDto.class))).thenReturn(updatedDirector);
 
         mockMvc.perform(put("/api/v1/directors/{id}", directorId)
                         .contentType(MediaType.APPLICATION_JSON)

@@ -2,6 +2,7 @@ package com.liapkalo.profitsoft.filmwebapp.service;
 
 import com.liapkalo.profitsoft.filmwebapp.entity.Director;
 import com.liapkalo.profitsoft.filmwebapp.entity.dto.DirectorDto;
+import com.liapkalo.profitsoft.filmwebapp.entity.dto.DirectorUpdateDto;
 import com.liapkalo.profitsoft.filmwebapp.entity.mapper.DirectorMapper;
 import com.liapkalo.profitsoft.filmwebapp.repository.DirectorRepository;
 import com.liapkalo.profitsoft.filmwebapp.service.impl.DirectorServiceImpl;
@@ -56,7 +57,7 @@ public class DirectorServiceTest {
 
     @Test
     void testUpdateDirector() {
-        DirectorDto directorDto = buildDirectorDto();
+        DirectorUpdateDto directorDto = buildDirectorUpdateDto();
 
         Director director = buildDirector();
         when(directorRepository.findById(director.getId())).thenReturn(Optional.of(director));
@@ -72,7 +73,7 @@ public class DirectorServiceTest {
 
     @Test
     void testUpdateDirector_NotValidName() {
-        DirectorDto directorDto = buildDirectorDtoInvalidName();
+        DirectorUpdateDto directorDto = buildDirectorUpdateDtoInvalidName();
 
         Director director = buildDirector();
         when(directorRepository.findById(director.getId())).thenReturn(Optional.of(director));
